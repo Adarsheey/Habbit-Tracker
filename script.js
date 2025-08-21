@@ -8,13 +8,13 @@ function saveHabits() {
   localStorage.setItem("habits", JSON.stringify(habits));
 }
 
-// Render habits
+
 function renderHabits() {
   habitList.innerHTML = "";
   habits.forEach((habit, index) => {
     const li = document.createElement("li");
 
-    // Progress bar
+    
     let progressHTML = '<div class="progress-bar">';
     for (let i = 0; i < 7; i++) {
       progressHTML += `<div class="day ${habit.weekLog.includes(i) ? "done" : ""}"></div>`;
@@ -35,7 +35,7 @@ function renderHabits() {
   saveHabits();
 }
 
-// Add habit
+
 addHabitBtn.addEventListener("click", () => {
   const habitName = habitInput.value.trim();
   if (habitName) {
@@ -51,7 +51,7 @@ addHabitBtn.addEventListener("click", () => {
   }
 });
 
-// Mark as done
+
 function markDone(index) {
   const today = new Date();
   const todayStr = today.toDateString();
@@ -68,17 +68,18 @@ function markDone(index) {
   renderHabits();
 }
 
-// Reset habit
+
 function resetHabit(index) {
   habits[index].weekLog = [];
   renderHabits();
 }
 
-// Delete habit
+
 function deleteHabit(index) {
   habits.splice(index, 1);
   renderHabits();
 }
 
-// Initial render
+
 renderHabits();
+
