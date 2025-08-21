@@ -52,21 +52,44 @@ addHabitBtn.addEventListener("click", () => {
 });
 
 
-function markDone(index) {
-  const today = new Date();
-  const todayStr = today.toDateString();
-  const dayIndex = today.getDay();
 
-  if (habits[index].lastCompleted !== todayStr) {
-    habits[index].streak++;
-    habits[index].lastCompleted = todayStr;
-
-    if (!habits[index].weekLog.includes(dayIndex)) {
-      habits[index].weekLog.push(dayIndex);
-    }
+function markHabit(index) {
+  const habits = JSON.parse(localStorage.getItem("habits")) || [];
+  const today = new Date().toDateString();
+  
+  
+  if (habits[index].lastDate === today) {
+    return;
   }
+
+  // Check if streak should continue or reset
+  if (habits[index].lastDate) {
+    const lastDate = new Date(habits[index].lastDate);
+    const diffDays = Math.floor(
+      (new Date(today) - lastDate) / (1000 * 60 * 60 * 24)
+    );
+
+    if (diffDays === 1) {
+      // consecutive day → increase streak
+      habits[index].streak += 1;
+    } else if (diffDays > 1) {
+      
+      habits[index].streak = 1;
+    }
+  } else {
+    
+    habits[index].streak = 1;
+  }
+
+  habits[index].lastDate = today;
+
+  localStorage.setItem("habits", JSON.stringify(habits));
   renderHabits();
 }
+
+
+
+
 
 
 function resetHabit(index) {
@@ -82,4 +105,5 @@ function deleteHabit(index) {
 
 
 renderHabits();
+
 
