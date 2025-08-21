@@ -53,7 +53,7 @@ addHabitBtn.addEventListener("click", () => {
 
 
 
-function markHabit(index) {
+function markDone(index) {
   const habits = JSON.parse(localStorage.getItem("habits")) || [];
   const today = new Date().toDateString();
   let message = "";
@@ -112,6 +112,7 @@ function deleteHabit(index) {
 
 
 renderHabits();
+
 
 
 
