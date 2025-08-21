@@ -56,8 +56,9 @@ addHabitBtn.addEventListener("click", () => {
 function markHabit(index) {
   const habits = JSON.parse(localStorage.getItem("habits")) || [];
   const today = new Date().toDateString();
-  
-  
+  let message = "";
+
+  // If the habit was already logged today, do nothing
   if (habits[index].lastDate === today) {
     return;
   }
@@ -73,11 +74,12 @@ function markHabit(index) {
       // consecutive day → increase streak
       habits[index].streak += 1;
     } else if (diffDays > 1) {
-      
+      // missed day(s) → reset streak
       habits[index].streak = 1;
+      message = "⚠️ Streak broken!";
     }
   } else {
-    
+    // first time logging
     habits[index].streak = 1;
   }
 
@@ -85,9 +87,14 @@ function markHabit(index) {
 
   localStorage.setItem("habits", JSON.stringify(habits));
   renderHabits();
+
+  // Show message if streak broke
+  if (message) {
+    const msgBox = document.getElementById("message");
+    msgBox.textContent = message;
+    setTimeout(() => msgBox.textContent = "", 3000); // clears after 3 sec
+  }
 }
-
-
 
 
 
@@ -105,5 +112,6 @@ function deleteHabit(index) {
 
 
 renderHabits();
+
 
 
