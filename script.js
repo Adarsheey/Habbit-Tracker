@@ -51,50 +51,24 @@ addHabitBtn.addEventListener("click", () => {
   }
 });
 
-
-
 function markDone(index) {
-  const habits = JSON.parse(localStorage.getItem("habits")) || [];
-  const today = new Date().toDateString();
-  let message = "";
+  const today = new Date();
+  const todayStr = today.toDateString();
+  const dayIndex = today.getDay();
 
-  // If the habit was already logged today, do nothing
-  if (habits[index].lastDate === today) {
-    return;
-  }
+  if (habits[index].lastCompleted !== todayStr) {
+    habits[index].streak++;
+    habits[index].lastCompleted = todayStr;
 
-  // Check if streak should continue or reset
-  if (habits[index].lastDate) {
-    const lastDate = new Date(habits[index].lastDate);
-    const diffDays = Math.floor(
-      (new Date(today) - lastDate) / (1000 * 60 * 60 * 24)
-    );
-
-    if (diffDays === 1) {
-      // consecutive day → increase streak
-      habits[index].streak += 1;
-    } else if (diffDays > 1) {
-      // missed day(s) → reset streak
-      habits[index].streak = 1;
-      message = "⚠️ Streak broken!";
+    if (!habits[index].weekLog.includes(dayIndex)) {
+      habits[index].weekLog.push(dayIndex);
     }
-  } else {
-    // first time logging
-    habits[index].streak = 1;
   }
-
-  habits[index].lastDate = today;
-
-  localStorage.setItem("habits", JSON.stringify(habits));
   renderHabits();
-
-  // Show message if streak broke
-  if (message) {
-    const msgBox = document.getElementById("message");
-    msgBox.textContent = message;
-    setTimeout(() => msgBox.textContent = "", 3000); // clears after 3 sec
-  }
 }
+
+
+
 
 
 
@@ -112,6 +86,7 @@ function deleteHabit(index) {
 
 
 renderHabits();
+
 
 
 
